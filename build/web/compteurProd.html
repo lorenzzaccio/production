@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+    <head>
+        <script type="text/javascript" src="lib/sql.js"></script>
+        <script type="text/javascript" src="lib/storage.js"></script>
+        <script type="text/javascript" src="lib/time.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.8.23.custom/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.8.23.custom/js/jquery-ui-1.8.23.custom.min.js"></script>
+        <meta charset="utf-8" />
+        <title>Compteur Production</title>
+
+        <style>
+            a { color: #0068D2; cursor: pointer; }
+            a:link, a:visited { text-decoration: none; color: #0068D2; }
+            a:hover, a:active { text-decoration: underline; color: #0068D2; }
+            body { font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
+
+            #contacts-table { border-collapse: collapse; }
+            #contacts-table, #contacts-table th, #contacts-table td { padding: 8px 16px; text-align: left; border: 0px solid #B9BABE; }
+            #contacts-table th { font-weight: bold; font-size: 14px; color: #29344B; }
+            #contacts-table td { color: #000; }
+            #contacts-table tr:nth-child(2n) { background: #E8EDFF; }
+            #contacts-table tr:hover td { background: #CAEFFD; color: #0768B3; cursor: pointer; } 
+
+            #contacts-form { padding: 10px; }
+            .text input, .button input { padding: 5px; margin: 0; border: 1px solid #ccc; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; }
+            #contacts-form .item { margin: 3px 0; }
+            #contacts-form label, #contacts-form .field { display: inline-block; color: #0C0B07; }
+            #contacts-form label { width: 90px; font-weight: bold; text-align: right; color: #666; }
+            #contacts-form .text input { width: 76px; padding: 3px; }
+            #contacts-form .mediumtext input { width: 300px; padding: 3px; }
+            #contacts-form .longtext input { width: 500px; padding: 3px; }
+            #contacts-form .button { display: inline-block; }
+            #contacts-form .button-wrapper { padding-left: 113px; }
+            .button input { padding: 4px 8px; color: #343434; background-color: #fdfdfd; background: -moz-linear-gradient(#fdfdfd, #e1e1e1); background: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#e1e1e1)); }
+            .button-default input { font-weight: bold; color: #fff; background-color: #7ca0c7; background: -moz-linear-gradient(#acc6e1, #7ca0c7); background: -webkit-gradient(linear, 0 0, 0 100%, from(#acc6e1), to(#7ca0c7)); border-color: #5b80b2; }
+            .button-disable input { padding: 4px 8px; color: #343434; background-color: #fdfdfd; background: -moz-linear-gradient(#fdfdfd, #e1e1e1); background: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#e1e1e1));  }
+        
+        </style>
+    </head>
+    <body>
+        <h1>Production</h1>
+
+        <form id="compteur-form">
+            <div class="item text">
+                <label>Capsules produites :</label>
+                <div class="field"><input type="text" name="capsBonnes" /></div>
+            </div>
+            <div class="item text">
+                <label>Déchets matière :</label>
+                <div class="field"><input type="text" name="dechetsMat" /></div>
+            </div>
+            <div class="item text">
+                <label>Déchets CRD ou transformés :</label>
+                <div class="field"><input type="text" name="dechetsTrans" /></div>
+            </div>
+            <div class="item text">
+                <label>Coups à vide :</label>
+                <div class="field"><input type="text" name="coupsVides" /></div>
+            </div>
+            <div class="item text">
+                <label>centilisation :</label>
+                <div class="field"><input type="text" name="centilisation" /></div>
+            </div>
+            <div class="item text">
+                <label>type de timbre :</label>
+                <div class="field"><input type="text" name="typeTimbre" /></div>
+            </div>
+            <div class="item text">
+                <label>texte fiscal :</label>
+                <div class="field"><input type="text" name="texteFiscal" /></div>
+            </div>
+            <div class="button-wrapper">
+                <div class="item button">
+                    <div class="field"><input type="button" id="compteur-op-discard" value="Annuler" /></div>
+                </div>
+                <div class="item button button-default">
+                    <div class="field"><input type="submit" id="compteur-op-save" value="Appliquer" /></div>
+                </div>
+            </div>
+            <input type="hidden" name="id_entry" value="0" />
+        </form>
+
+        <script>
+            
+            
+            //initWindow();
+        </script>
+    </body>
+</html>

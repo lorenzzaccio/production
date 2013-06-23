@@ -1,0 +1,428 @@
+<!doctype html>
+<html>
+    <head>
+        <script type="text/javascript" src="lib/sql.js"></script>
+        <script type="text/javascript" src="lib/storage.js"></script>
+        <script type="text/javascript" src="lib/time.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.8.23.custom/js/jquery-1.8.0.min.js"></script>
+        <script type="text/javascript" src="jquery-ui-1.8.23.custom/js/jquery-ui-1.8.23.custom.min.js"></script>
+        <meta charset="utf-8" />
+        <title>Production</title>
+
+        <style>
+            a { color: #0068D2; cursor: pointer; }
+            a:link, a:visited { text-decoration: none; color: #0068D2; }
+            a:hover, a:active { text-decoration: underline; color: #0068D2; }
+            body { font: 12px/18px "Lucida Grande", "Lucida Sans Unicode", sans-serif; }
+            
+            #contacts-table { border-collapse: collapse; }
+            #contacts-table, #contacts-table th, #contacts-table td { padding: 8px 16px; text-align: left; border: 0px solid #B9BABE; }
+            #contacts-table th { font-weight: bold; font-size: 14px; color: #29344B; }
+            #contacts-table td { color: #000; }
+            #contacts-table tr:nth-child(2n) { background: #E8EDFF; }
+            #contacts-table tr:hover td { background: #CAEFFD; color: #0768B3; cursor: pointer; } 
+
+            #contacts-form { padding: 10px; }
+            .text input, .button input { padding: 5px; margin: 0; border: 1px solid #ccc; -moz-border-radius: 2px; -webkit-border-radius: 2px; border-radius: 2px; }
+            #contacts-form .item { margin: 3px 0; }
+            #contacts-form label, #contacts-form .field { display: inline-block; color: #0C0B07; }
+            #contacts-form label { width: 90px; font-weight: bold; text-align: right; color: #666; }
+            #contacts-form .text input { width: 76px; padding: 3px; }
+            #contacts-form .mediumtext input { width: 200px; padding: 3px; }
+            #contacts-form .longtext input { width: 500px; padding: 3px; }
+            #contacts-form .button { display: inline-block; }
+            #contacts-form .button-wrapper { padding-left: 113px; }
+            .button input { padding: 4px 8px; color: #343434; background-color: #fdfdfd; background: -moz-linear-gradient(#fdfdfd, #e1e1e1); background: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#e1e1e1)); }
+            .button-default input { font-weight: bold; color: #fff; background-color: #7ca0c7; background: -moz-linear-gradient(#acc6e1, #7ca0c7); background: -webkit-gradient(linear, 0 0, 0 100%, from(#acc6e1), to(#7ca0c7)); border-color: #5b80b2; }
+            .button-disable input { padding: 4px 8px; color: #343434; background-color: #fdfdfd; background: -moz-linear-gradient(#fdfdfd, #e1e1e1); background: -webkit-gradient(linear, 0 0, 0 100%, from(#fdfdfd), to(#e1e1e1));  }
+
+        </style>
+    </head>
+    <body>
+        <h1>Production</h1>
+        
+                    <div align="center"><input type="text" style="border: none" id="message" name="message"   /></div>
+        <table id="contacts-table">
+            <tr id="contacts-head">
+                <th>ID</th>
+                <th>commande</th>
+                <th>étape</th>
+                <th>préfixe</th>
+                <th>article</th>
+                <th>quantité</th>
+                <th>transfo</th>
+                <th>commentaires</th>
+                <th>article transformé</th>
+                <th>date</th>
+                <th>status</th>
+            </tr>
+        </table>
+
+        <form id="contacts-form">
+            <div id="contactsdiv">
+                <div class="item text">
+                    <label>commande:</label>
+                    <div class="field"><input type="text" name="commande" /></div>
+                </div>
+                <div class="item text">
+                    <label>étape:</label>
+                    <div class="field"><input type="text" name="etape" /></div>
+                </div>
+                <div class="item text">
+                    <label>quantité:</label>
+                    <div class="field"><input type="text" name="quantity" /></div>
+                </div>
+                <div id="transdiv" class="item mediumtext">
+                    <label>transformation</label>
+                    <div class="field"><input type="text" name="transfo" /></div>
+                </div>
+                <div class="item longtext">
+                    <label>commentaire</label>
+                    <div class="field"><input type="text" name="comment" /></div>
+                </div>
+            </div>
+            <div id="compteurdiv">
+                <div class="item text">
+                    <label>Capsules produites :</label>
+                    <div class="field"><input type="text" id="capsBonnes" name="capsBonnes" value="0" /></div>
+
+                    <label>Déchets matière :</label>
+                    <div class="field"><input type="text" id="dechetsMat" name="dechetsMat" value="0"/></div>
+
+                    <label>Déchets CRD ou transformés :</label>
+                    <div class="field"><input type="text" id="dechetsTrans" name="dechetsTrans" value="0"/></div>
+
+                    <label>Coups à vide :</label>
+                    <div class="field"><input type="text" id="coupsVides" name="coupsVides" value="0"/></div>
+                </div>
+                
+                <div class="item mediumtext">
+                    <label>centilisation :</label>
+                    <div class="field"><input type="text" id="centilisation" /></div>
+                    <label>type de timbre :</label>
+                    <div class="field"><input type="text" id="typeTimbre" /></div>
+                    <label>texte fiscal :</label>
+                    <div class="field"><input type="text" id="texteFiscal" /></div>
+                </div>
+                
+                
+                
+
+            </div>
+            <div class="item text">
+                    <label>préfixe</label>
+                    <div class="field"><input type="text" id="prefix" name="prefix" /></div>
+                    <label>article</label>
+                    <div class="field"><input type="text" id="article" name="article" /></div>
+                    <label>---------</label>
+                    <label>préfixe trans</label>
+                    <div class="field"><input type="text" id="prefixTrans" name="prefix_trans" /></div>
+                    <label>article trans</label>
+                    <div class="field"><input type="text" id="articleTrans" name="article_trans" /></div>
+                </div>
+            <div class="button-wrapper">
+                <<!--div class="item button">
+                    <div class="field"><input type="button" id="contacts-op-discard" value="Discard" /></div>
+                </div>
+                <div class="item button button-default">
+                    <div class="field"><input type="submit" id="contacts-op-save" value="Save" /></div>
+                </div>-->
+                <div class="item button button-default">
+                    <div class="field"><input type="button" id="contacts-op-start" value="Démarrer" /></div>
+                </div>
+                <div class="item button button-default">
+                    <div class="field"><input type="button" id="contacts-op-end" value="Terminer" /></div>
+                </div>
+            </div>
+            <input type="hidden" name="id_entry" value="0" />
+        </form>
+
+        <script>
+            var m_lieu
+            var m_texteFiscal;
+            var m_centilisation;
+            var m_typeTimbre;
+            var m_reset=0;
+            
+            function initWindow(){
+                document.getElementById("centilisation").value = m_centilisation;
+                document.getElementById("typeTimbre").value = m_typeTimbre;
+                document.getElementById("texteFiscal").value = m_texteFiscal;
+                
+                //alert("centilisation="+m_centilisation);
+                //form.centilisation.value = m_centilisation;
+                //form.typeTimbre.value = m_typeTimbre;
+                //form.texteFiscal.value = m_texteFiscal;
+                /*
+                button_discard.addEventListener("click", function(event) {
+                    window.close();
+                }, true);
+            
+                button_save.addEventListener("submit", function(event) {
+                    
+                    window.close();
+                }, true);*/
+            }
+            
+            var Production = {
+                index: window.localStorage.getItem("Production:index"),
+                $table: document.getElementById("contacts-table"),
+                $form: document.getElementById("contacts-form"),
+                $button_save: document.getElementById("contacts-op-save"),
+                $button_discard: document.getElementById("contacts-op-discard"),
+                $button_start: document.getElementById("contacts-op-start"),
+                $button_end: document.getElementById("contacts-op-end"),
+
+                init: function() {
+                    // initialize storage index
+                    if (!Production.index) {
+                        window.localStorage.setItem("Production:index", Production.index = 1);
+                    }
+
+                    // initialize form
+                    Production.$form.reset();
+                    /*Production.$button_discard.addEventListener("click", function(event) {
+                        Production.$form.reset();
+                        Production.$form.id_entry.value = 0;
+                    }, true);*/
+                    Production.$button_start.addEventListener("click", function(event) {
+                        var commande = Production.$form.commande.value;
+                        var etape = Production.$form.etape.value;
+                        updateSql("ficheProduction","ficheprod_datedeb",getDate(),"ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",null);
+                        updateSql("ficheProduction","ficheprod_heuredeb",getTime(),"ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",null);
+                        updateSql("ficheProduction","ficheprod_status","2","ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",resetScreen);
+                        //setTimeout("resetForm()", 1200);
+                        
+                    }, true);
+                    Production.$button_end.addEventListener("click", function(event) {
+                        var commande = Production.$form.commande.value;
+                        var etape = Production.$form.etape.value;
+                        updateSql("ficheProduction","ficheprod_datedeb",getDate(),"ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",null);
+                        updateSql("ficheProduction","ficheprod_heuredeb",getTime(),"ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",null);
+                        updateSql("ficheProduction","ficheprod_status","3","ficheprod_ordre="+commande+" and ficheprod_etape="+etape+"",null);
+                        //setTimeout("resetForm()", 1200);
+                        //var win = window.open("compteurProd.html","production CRD",config='height=120, width=400, toolbar=no, menubar=no, scrollbars=no, resizable=no, location=no, directories=no, status=no');    
+                        var arrow = [];
+                        arrow[0]=document.getElementById("prefix").value;
+                        arrow[1]=document.getElementById("articleTrans").value;
+                        arrow[2]=m_texteFiscal;
+                        arrow[3]=document.getElementById("dechetsTrans").value;
+                        arrow[4]=document.getElementById("capsBonnes").value;
+                        arrow[5]=m_typeTimbre;
+                        arrow[6]=m_centilisation;
+                        arrow[9]=document.getElementById("dechetsMat").value;
+                        arrow[7]=document.getElementById("coupsVides").value;
+                        arrow[8]="marcel";
+                        arrow[10]=document.getElementById("article").value;
+                        saveProd(arrow);
+                        
+                    }, true);
+                    /*Production.$form.addEventListener("submit", function(event) {
+                        var entry = {
+                            id: parseInt(this.id_entry.value),
+                            first_name: this.first_name.value,
+                            last_name: this.last_name.value,
+                            email: this.email.value
+                        };
+                        
+                        
+                        event.preventDefault();
+                    }, true);*/
+
+                    // initialize table
+                    if (window.localStorage.length - 1) {
+                        var contacts_list = [], i, key;
+                        for (i = 0; i < window.localStorage.length; i++) {
+                            key = window.localStorage.key(i);
+                            if (/Production:\d+/.test(key)) {
+                                contacts_list.push(JSON.parse(window.localStorage.getItem(key)));
+                            }
+                        }
+
+                        if (contacts_list.length) {
+                            contacts_list
+                            .sort(function(a, b) {
+                                return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+                            })
+                            .forEach(Production.tableAdd);
+                        }
+                    }
+                    Production.$table.addEventListener("click", function(event) {
+                        var op = event.target.getAttribute("data-op");
+                        if (/edit|remove/.test(op)) {
+                            var entry = JSON.parse(window.localStorage.getItem("Production:"+ event.target.getAttribute("data-id")));
+                            if (op == "edit") {
+                                Production.display(entry);
+                            }
+                            else if (op == "remove") {
+                                if (confirm('Etes vous certain de vouloir effacer la commande n°"'+ entry.ordre +'" de la production?')) {
+                                    Production.storeRemove(entry);
+                                    Production.tableRemove(entry);
+                                }
+                            }
+                            event.preventDefault();
+                        }
+                    }, true);
+                },
+                display: function(entry){
+                    Production.$form.commande.value = entry.ordre;
+                    Production.$form.etape.value = entry.etape;
+                    Production.$form.quantity.value = entry.quantity;
+                    Production.$form.prefix.value = entry.pref;
+                    Production.$form.article.value = entry.art;
+                    Production.$form.articleTrans.value = entry.arttrans;
+                    Production.$form.prefixTrans.value = entry.pref;
+                    Production.$form.transfo.value = entry.transfo;
+                    Production.$form.comment.value = entry.comment;
+                    //extract transfo informations
+                    var transfo = entry.transfo;
+                    extractTransInfo(transfo);
+                    //getCompteur("marcel");
+                    
+                    var $button_start = document.getElementById("contacts-op-start");
+                    var $button_end = document.getElementById("contacts-op-end");
+                    if(entry.status=="1"){
+                        $button_start.disabled=false;
+                        $button_end.disabled=true;
+                        document.getElementById("contacts-op-end").style.background='#717171';
+                        document.getElementById("contacts-op-start").style.background='#7ca0c7';
+                        document.getElementById("compteurdiv").style.display = 'none';
+                        document.getElementById("contactsdiv").style.display = 'block';
+                        //Production.$form.transfo.style.display = 'none';
+                    }
+                    if(entry.status=="2"){
+                        $button_start.disabled=true;
+                        $button_end.disabled=false;
+                        document.getElementById("contacts-op-end").style.background='#7ca0c7';
+                        document.getElementById("contacts-op-start").style.background='#717171';
+                        document.getElementById("compteurdiv").style.display = 'block';
+                        document.getElementById("contactsdiv").style.display = 'none';
+                        initWindow();
+                        //document.getElementById("contacts-op-start").className=("item button-default");
+                        //document.getElementById("contacts-op-end").className=("item button-disable");
+                    }
+                },
+                storeAdd: function(entry) {
+                    entry.id = Production.index;
+                    window.localStorage.setItem("Production:index", ++Production.index);
+                    window.localStorage.setItem("Production:"+ entry.id, JSON.stringify(entry));
+                },
+                storeEdit: function(entry) {
+                    window.localStorage.setItem("Production:"+ entry.id, JSON.stringify(entry));
+                },
+                storeRemove: function(entry) {
+                    window.localStorage.removeItem("Production:"+ entry.id);
+                },
+                storeRemoveAll: function(entry) {
+                    window.localStorage.clear();
+                    window.localStorage.setItem("Production:index", Production.index = 1);
+                },
+                tableAdd: function(entry) {
+                    var $tr = document.createElement("tr"), $td, key;
+                    for (key in entry) {
+                        if (entry.hasOwnProperty(key)) {
+                            $td = document.createElement("td");
+                            $td.appendChild(document.createTextNode(entry[key]));
+                            $tr.appendChild($td);
+                        }
+                    }
+                    $td = document.createElement("td");
+                    $td.innerHTML = '<a data-op="edit" data-id="'+ entry.id +'">Edit</a> | <a data-op="remove" data-id="'+ entry.id +'">Remove</a>';
+                    $tr.appendChild($td);
+                    $tr.setAttribute("id", "entry-"+ entry.id);
+                    $tr.onclick = function(){
+                        Production.display(entry);
+                    }
+                    Production.$table.appendChild($tr);
+                },
+                tableEdit: function(entry) {
+                    var $tr = document.getElementById("entry-"+ entry.id), $td, key;
+                    $tr.innerHTML = "";
+                    for (key in entry) {
+                        if (entry.hasOwnProperty(key)) {
+                            $td = document.createElement("td");
+                            $td.appendChild(document.createTextNode(entry[key]));
+                            $tr.appendChild($td);
+                        }
+                    }
+                    $td = document.createElement("td");
+                    $td.innerHTML = '<a data-op="edit" data-id="'+ entry.id +'">Edit</a> | <a data-op="remove" data-id="'+ entry.id +'">Remove</a>';
+                    $tr.appendChild($td);
+                },
+                tableRemove: function(entry) {
+                    Production.$table.removeChild(document.getElementById("entry-"+ entry.id));
+                }
+            };
+            resetForm();
+            //Production.init();
+            function resetForm(){
+                document.getElementById("compteurdiv").style.display = 'none';
+                Production.storeRemoveAll();
+                 arrec=[];
+                 var obj = document.getElementById("contacts-table");
+                deleteLine("contacts-table");
+                
+                syncS2MPhp();
+                //setTimeout("syncS2MPhp()", 300);
+            }
+            
+             function resetScreen(){
+                if(m_reset==0){
+                    m_reset=1;
+                    setTimeout("resetForm()", 800);
+                }
+                    
+            }
+            function extractTransInfo(transfo){
+                var mySplitResult = transfo.split("-");
+                m_lieu = mySplitResult[0];
+                if (mySplitResult.length>1){
+                    var tmp = mySplitResult[1];
+                    var splitResult = tmp.split("R");
+                    if(splitResult.length>1)
+                        m_texteFiscal = splitResult[0]+" RECOLTANT "+splitResult[1];
+                    splitResult = tmp.split("N");
+                    if(splitResult.length>1)
+                        m_texteFiscal = splitResult[0]+" N "+splitResult[1];
+                    splitResult = tmp.split("E");
+                    if(splitResult.length>1)
+                        m_texteFiscal = splitResult[0]+" E "+splitResult[1];
+                }else
+                    m_texteFiscal="";
+                if (mySplitResult.length>2)
+                    m_centilisation = parseInt(mySplitResult[2])/10;
+                else
+                    m_centilisation="";
+                if (mySplitResult.length>3)
+                    m_typeTimbre = mySplitResult[3];
+                else{
+                    m_typeTimbre="EXPORT";
+                    m_texteFiscal="";
+                }
+            }
+            
+            function deleteLine(tableID) {
+            try {
+            var table = document.getElementById(tableID);
+            var rowCount = table.rows.length;
+ 
+            for(var i=0; i<rowCount; i++) {
+                var row = table.rows[i];
+                //var chkbox = row.cells[0].childNodes[0];
+                //if(null != chkbox && true == chkbox.checked) {
+                    table.deleteRow(i);
+                    rowCount--;
+                    i--;
+                //}
+ 
+ 
+            }
+            }catch(e) {
+                alert(e);
+            }
+        }
+            
+        
+        </script>
+    </body>
+</html>
